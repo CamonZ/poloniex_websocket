@@ -8,7 +8,7 @@ defmodule PoloniexFeed.Consumer do
   end
 
   def subscribe_to_currency(client, pair) do
-    frame = pair |> subscription_to_currency_channel_message
+    frame = pair |> subscription_message
     send_frame(client, frame)
   end
 
@@ -19,7 +19,7 @@ defmodule PoloniexFeed.Consumer do
   ## Callbacks
 
   def handle_frame({_type, msg}, state) do
-    Poison.decode!(msg) |> PoloniexFeed.MessageParser.process
+    state = Poison.decode!(msg) |> PoloniexFeed.MessageParser.process() |> handle_data(state)
     {:ok, state}
   end
 
@@ -31,18 +31,36 @@ defmodule PoloniexFeed.Consumer do
     super(disconnect_map, state)
   end
 
+  def handle_info(:check_heartbeat, _from, state) do
+    {last_heartbeat: heartbeat} = state
+    DateTime.utc_now |>
+    {:noreply, state}
+  end
+
+  def handle_data({:heartbeat, timestamp}, state) do
+    Map.put(state, :last_heartbeat, timestamp)
+  end
+
+  def handle_data({:market_event, events}) do
+    # do something with the events here
+  end
+
   ## Private functions
 
   defp api_url do
     "wss://api2.poloniex.com/"
   end
 
-  defp subscription_to_currency_channel_message(currency) do
+  defp subscription_message(currency) do
     %{command: "subscribe", channel: currency} |>
       encode_message
   end
 
   defp encode_message(hsh) do
     {:text, Poison.encode!(hsh) }
+  end
+
+  defp schedule_heartbeat_check() do
+    Process.send_after(self(), :check_heartbeat, 10000)
   end
 end
