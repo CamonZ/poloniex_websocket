@@ -32,8 +32,15 @@ defmodule PoloniexFeed.Consumer do
   end
 
   def handle_info(:check_heartbeat, _from, state) do
-    {last_heartbeat: heartbeat} = state
-    DateTime.utc_now |>
+    %{last_heartbeat: heartbeat} = state
+    now = DateTime.utc_now |> DateTime.to_unix(:millisecond)
+
+    if (now - heartbeat > 10000)  do
+      Process.exit(self(), :disconnected)
+    else
+      schedule_heartbeat_check()
+    end
+
     {:noreply, state}
   end
 
@@ -41,8 +48,9 @@ defmodule PoloniexFeed.Consumer do
     Map.put(state, :last_heartbeat, timestamp)
   end
 
-  def handle_data({:market_event, events}) do
+  def handle_data({:market_event, events}, state) do
     # do something with the events here
+    state
   end
 
   ## Private functions
