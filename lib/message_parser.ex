@@ -1,11 +1,11 @@
 defmodule PoloniexFeed.MessageParser do
-  def process([channel | _], state) when channel == 1010 do
-    {:heartbeat, timestamp()}
+  def process([channel | _]) when channel == 1010 do
+    {:heartbeat, timestamp(), channel}
   end
 
-  def process([channel | channel_message], state) when channel > 0 and channel < 1000 do
+  def process([channel | channel_message]) when channel > 0 and channel < 1000 do
     events = PoloniexFeed.Messages.MarketEvent.build_events(channel_message, timestamp())
-    {:market_event, events}
+    {:market_event, events, channel}
   end
 
   defp timestamp do

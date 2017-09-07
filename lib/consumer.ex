@@ -3,7 +3,7 @@ defmodule PoloniexFeed.Consumer do
 
   ## Client API
 
-  def start_link(state \\ %{}) do
+  def start_link(state \\ %{received_messages: 0}) do
     WebSockex.start_link(api_url(), __MODULE__, state)
   end
 
@@ -23,34 +23,14 @@ defmodule PoloniexFeed.Consumer do
     {:ok, state}
   end
 
-  def handle_disconnect(%{reason: {:local, _reason}}, state) do
-    {:ok, state}
-  end
-
-  def handle_disconnect(disconnect_map, state) do
-    super(disconnect_map, state)
-  end
-
-  def handle_info(:check_heartbeat, _from, state) do
-    %{last_heartbeat: heartbeat} = state
-    now = DateTime.utc_now |> DateTime.to_unix(:millisecond)
-
-    if (now - heartbeat > 10000)  do
-      Process.exit(self(), :disconnected)
-    else
-      schedule_heartbeat_check()
-    end
-
-    {:noreply, state}
-  end
-
-  def handle_data({:heartbeat, timestamp}, state) do
+  def handle_data({:heartbeat, timestamp, _}, state) do
     Map.put(state, :last_heartbeat, timestamp)
   end
 
-  def handle_data({:market_event, events}, state) do
-    # do something with the events here
-    state
+  def handle_data({:market_event, _events, _}, state) do
+    count = state[:received_messages] + 1
+    IO.puts "Received #{count} Messages"
+    Map.put(state, :received_messages, count)
   end
 
   ## Private functions
@@ -66,9 +46,5 @@ defmodule PoloniexFeed.Consumer do
 
   defp encode_message(hsh) do
     {:text, Poison.encode!(hsh) }
-  end
-
-  defp schedule_heartbeat_check() do
-    Process.send_after(self(), :check_heartbeat, 10000)
   end
 end
