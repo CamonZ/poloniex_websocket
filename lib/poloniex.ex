@@ -1,9 +1,11 @@
-defmodule PoloniexFeed.Consumer do
+defmodule Poloniex do
   use WebSockex
+
+  alias Poloniex.MessageParser, as: MessageParser
 
   ## Client API
 
-  def start_link(state \\ %{received_messages: 0}) do
+  def start_link(state \\ %{received_messages: 0, callback: nil}) do
     WebSockex.start_link(api_url(), __MODULE__, state)
   end
 
@@ -19,7 +21,7 @@ defmodule PoloniexFeed.Consumer do
   ## Callbacks
 
   def handle_frame({_type, msg}, state) do
-    state = Poison.decode!(msg) |> PoloniexFeed.MessageParser.process() |> handle_data(state)
+    state = Poison.decode!(msg) |> MessageParser.process() |> handle_data(state)
     {:ok, state}
   end
 
@@ -27,9 +29,13 @@ defmodule PoloniexFeed.Consumer do
     Map.put(state, :last_heartbeat, timestamp)
   end
 
-  def handle_data({:market_event, _events, _}, state) do
+  def handle_data({:market_event, events, _}, %{callback: {m, f}} = state) do
     count = state[:received_messages] + 1
-    IO.puts "Received #{count} Messages"
+
+    if (m != nil && f != nil) do
+      apply(m, f, events)
+    end
+
     Map.put(state, :received_messages, count)
   end
 

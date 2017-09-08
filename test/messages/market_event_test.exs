@@ -1,15 +1,15 @@
-defmodule PoloniexFeed.Messages.MarketEventTest do
+defmodule Poloniex.Messages.MarketEventTest do
   use ExUnit.Case
 
-  alias PoloniexFeed.Messages.OrderBook, as: OrderBook
-  alias PoloniexFeed.Messages.OrderBookUpdate, as: OrderBookUpdate
-  alias PoloniexFeed.Messages.MarketTrade, as: MarketTrade
+  alias Poloniex.Messages.OrderBook, as: OrderBook
+  alias Poloniex.Messages.OrderBookUpdate, as: OrderBookUpdate
+  alias Poloniex.Messages.MarketTrade, as: MarketTrade
 
-  doctest PoloniexFeed.Messages.MarketEvent
+  doctest Poloniex.Messages.MarketEvent
 
   test "builds an order book update" do
     data = [90077516, [["o",1,"0.00004962","0.00000150"]]]
-    assert PoloniexFeed.Messages.MarketEvent.build_events(data, 1504556374) == [%OrderBookUpdate{
+    assert Poloniex.Messages.MarketEvent.build_events(data, 1504556374) == [%OrderBookUpdate{
       nonce: 90077516,
       side: :bid,
       rate: 4962,
@@ -20,7 +20,7 @@ defmodule PoloniexFeed.Messages.MarketEventTest do
 
   test "builds a market trade update" do
     data = [90077516, [["t","13000395",1,"0.00004995","0.00000660",1504480453]]]
-    assert PoloniexFeed.Messages.MarketEvent.build_events(data, 1504556374) == [%MarketTrade{
+    assert Poloniex.Messages.MarketEvent.build_events(data, 1504556374) == [%MarketTrade{
       nonce: 90077516,
       side: :buy,
       rate: 4995,
@@ -47,7 +47,7 @@ defmodule PoloniexFeed.Messages.MarketEventTest do
       ]
     ]
 
-    assert PoloniexFeed.Messages.MarketEvent.build_events(data, 1504556374) == [%OrderBook{
+    assert Poloniex.Messages.MarketEvent.build_events(data, 1504556374) == [%OrderBook{
       nonce: 27366912,
       timestamp: 1504556374,
       bids: %{

@@ -10,11 +10,11 @@ use Mix.Config
 
 # You can configure for your application as:
 #
-#     config :poloniex_feed, key: :value
+#     config :poloniex, key: :value
 #
 # And access this configuration in your application as:
 #
-#     Application.get_env(:poloniex_feed, :key)
+#     Application.get_env(:poloniex, :key)
 #
 # Or configure a 3rd-party app:
 #
