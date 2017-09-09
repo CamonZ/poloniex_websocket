@@ -41,8 +41,8 @@ defmodule Poloniex.Messages.MarketEvent do
     %OrderBookUpdate{
       nonce: nonce,
       side: :ask,
-      rate: rate,
-      amount: amount,
+      rate: to_integer(rate),
+      amount: to_integer(amount),
       timestamp: timestamp
     }
   end
