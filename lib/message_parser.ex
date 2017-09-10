@@ -1,7 +1,7 @@
 defmodule Poloniex.MessageParser do
   alias Poloniex.Messages.MarketEvent, as: MarketEvent
 
-  def process([channel | _], timestamp) when channel == 1010 do
+  def process([channel | _], timestamp \\ nil) when channel == 1010 do
     if timestamp == nil  do
       timestamp = now()
     end
@@ -9,7 +9,7 @@ defmodule Poloniex.MessageParser do
     {:heartbeat, timestamp, channel}
   end
 
-  def process([channel | channel_message], timestamp) when channel > 0 and channel < 1000 do
+  def process([channel | channel_message], timestamp \\ nil) when channel > 0 and channel < 1000 do
     if timestamp == nil  do
       timestamp = now()
     end
