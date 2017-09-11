@@ -15,9 +15,8 @@ defmodule Poloniex do
     raise "No callback specified"
   end
 
-  def subscribe_to_currency(client, pair) do
-    frame = pair |> subscription_message
-    send_frame(client, frame)
+  def subscribe_to_currency(client, currency_pair) do
+    currency_pair |> build_subscription_frame |> send_frame(client)
   end
 
   ## Callbacks
@@ -45,7 +44,7 @@ defmodule Poloniex do
 
   ## Private functions
 
-  defp send_frame(pid, frame) do
+  defp send_frame(frame, pid) do
     WebSockex.send_frame(pid, frame)
   end
 
@@ -53,12 +52,7 @@ defmodule Poloniex do
     "wss://api2.poloniex.com/"
   end
 
-  defp subscription_message(currency) do
-    %{command: "subscribe", channel: currency} |>
-      encode_message
-  end
-
-  defp encode_message(hsh) do
-    {:text, Poison.encode!(hsh) }
+  defp build_subscription_frame(currency) do
+    { :text, Poison.encode(%{command: "subscribe", channel: currency}) }
   end
 end
