@@ -1,22 +1,26 @@
 defmodule Poloniex.MessageParser do
   alias Poloniex.Messages.MarketEvent, as: MarketEvent
 
-  def process([channel | _], timestamp \\ nil) when channel == 1010 do
-    if timestamp == nil  do
-      timestamp = now()
-    end
+  def process(_, timestamp \\ nil)
 
-    {:heartbeat, timestamp, channel}
+  def process([channel | _], timestamp) when channel == 1010 and is_nil(timestamp) do
+    %{heartbeat: now()}
   end
 
-  def process([channel | channel_message], timestamp \\ nil) when channel > 0 and channel < 1000 do
-    if timestamp == nil  do
-      timestamp = now()
-    end
+  def process([channel | _], timestamp) when channel == 1010 do
+    %{heartbeat: timestamp}
+  end
 
-    events = MarketEvent.build_events(channel_message, timestamp)
+  def process([channel | message], timestamp) when channel > 0 and channel < 1000 and is_nil(timestamp) do
+    Map.put(market_events(message, now()), :channel, channel)
+  end
 
-    {:market_event, events, channel}
+  def process([channel | message], timestamp) when channel > 0 and channel < 1000 do
+    Map.put(market_events(message, timestamp), :channel, channel)
+  end
+
+  defp market_events(message, timestamp) do
+    MarketEvent.build_events(message, timestamp)
   end
 
   defp now do

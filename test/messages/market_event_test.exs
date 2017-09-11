@@ -1,7 +1,6 @@
 defmodule Poloniex.Messages.MarketEventTest do
   use ExUnit.Case
 
-
   alias Poloniex.Messages.MarketEvent, as: MarketEvent
   alias Poloniex.Messages.OrderBook, as: OrderBook
   alias Poloniex.Messages.OrderBookUpdate, as: OrderBookUpdate
@@ -12,56 +11,68 @@ defmodule Poloniex.Messages.MarketEventTest do
   describe "When building an order book update" do
     test "builds a bid order book update" do
       data = [90077516, [["o",1,"0.00004962","0.00000150"]]]
-      assert MarketEvent.build_events(data, 1504556374) == [
-        %OrderBookUpdate{
-          nonce: 90077516,
-          side: :bid,
-          rate: 4962,
-          amount: 150,
-          timestamp: 1504556374
-        }]
+      assert MarketEvent.build_events(data, 1504556374) == %{
+        events: [
+          %OrderBookUpdate{
+            nonce: 90077516,
+            side: :bid,
+            rate: 4962,
+            amount: 150,
+            timestamp: 1504556374
+          }
+        ]
+      }
     end
 
     test "builds an ask order book update" do
       data = [90077516, [["o",0,"0.00004962","0.00000150"]]]
-      assert MarketEvent.build_events(data, 1504556374) == [
-        %OrderBookUpdate{
-          nonce: 90077516,
-          side: :ask,
-          rate: 4962,
-          amount: 150,
-          timestamp: 1504556374
-        }]
+      assert MarketEvent.build_events(data, 1504556374) == %{
+        events: [
+          %OrderBookUpdate{
+            nonce: 90077516,
+            side: :ask,
+            rate: 4962,
+            amount: 150,
+            timestamp: 1504556374
+          }
+        ]
+      }
     end
   end
 
   describe "When building a market trade update" do
     test "and the trade is an uptick" do
       data = [90077516, [["t","13000395",1,"0.00004995","0.00000660",1504480453]]]
-      assert MarketEvent.build_events(data, 1504556374) == [
-        %MarketTrade{
-          nonce: 90077516,
-          side: :buy,
-          rate: 4995,
-          amount: 660,
-          trade_id: "13000395",
-          trade_timestamp: 1504480453,
-          timestamp: 1504556374
-        }]
+      assert MarketEvent.build_events(data, 1504556374) == %{
+        events: [
+          %MarketTrade{
+            nonce: 90077516,
+            side: :buy,
+            rate: 4995,
+            amount: 660,
+            trade_id: "13000395",
+            trade_timestamp: 1504480453,
+            timestamp: 1504556374
+          }
+        ]
+      }
     end
 
     test "and the trade is a downtick" do
       data = [90077516, [["t","13000395",0,"0.00004995","0.00000660",1504480453]]]
-      assert MarketEvent.build_events(data, 1504556374) == [
-        %MarketTrade{
-          nonce: 90077516,
-          side: :sell,
-          rate: 4995,
-          amount: 660,
-          trade_id: "13000395",
-          trade_timestamp: 1504480453,
-          timestamp: 1504556374
-        }]
+      assert MarketEvent.build_events(data, 1504556374) == %{
+        events: [
+          %MarketTrade{
+            nonce: 90077516,
+            side: :sell,
+            rate: 4995,
+            amount: 660,
+            trade_id: "13000395",
+            trade_timestamp: 1504480453,
+            timestamp: 1504556374
+          }
+        ]
+      }
     end
   end
 
@@ -82,18 +93,22 @@ defmodule Poloniex.Messages.MarketEventTest do
       ]
     ]
 
-    assert MarketEvent.build_events(data, 1504556374) == [
-      %OrderBook{
-        nonce: 27366912,
-        timestamp: 1504556374,
-        bids: %{
-          134000 => 165901646269,
-          133188 => 52557287
-        },
-        asks: %{
-          134216 => 171288737,
-          134232 => 1335069928
+    assert MarketEvent.build_events(data, 1504556374) == %{
+      currency: "BTC_STRAT",
+      events: [
+        %OrderBook{
+          nonce: 27366912,
+          timestamp: 1504556374,
+          bids: %{
+            134000 => 165901646269,
+            133188 => 52557287
+          },
+          asks: %{
+            134216 => 171288737,
+            134232 => 1335069928
+          }
         }
-      }]
+      ]
+    }
   end
 end
