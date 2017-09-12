@@ -1,4 +1,5 @@
 defmodule PoloniexTest do
+  alias Poloniex.Messages.OrderBookUpdate, as: OrderBookUpdate
   use ExUnit.Case
   doctest Poloniex
 
@@ -19,6 +20,14 @@ defmodule PoloniexTest do
       assert currency == "BTC_XRP"
       assert is_list(events)
 
+      {extracted, rest} = Map.split(hd(events), [:side, :rate, :amount, :nonce])
+
+      assert extracted == %{
+        nonce: 92261674,
+        side: :ask,
+        rate: 5136,
+        amount: 1839534225
+      }
     end
 
     test "it calls the passed callback function in the state" do
