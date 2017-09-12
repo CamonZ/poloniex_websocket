@@ -16,7 +16,7 @@ defmodule Poloniex.Messages.MarketEvent do
   end
 
   defp wrap_result(result) do
-    %{ events: result }
+    %{ events: result, currency: nil }
   end
 
   defp process_events([[type | event_details]| rest], nonce, timestamp) when type == "o" do

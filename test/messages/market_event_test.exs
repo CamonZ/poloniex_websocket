@@ -20,7 +20,8 @@ defmodule Poloniex.Messages.MarketEventTest do
             amount: 150,
             timestamp: 1504556374
           }
-        ]
+        ],
+        currency: nil
       }
     end
 
@@ -35,7 +36,8 @@ defmodule Poloniex.Messages.MarketEventTest do
             amount: 150,
             timestamp: 1504556374
           }
-        ]
+        ],
+        currency: nil
       }
     end
   end
@@ -54,7 +56,8 @@ defmodule Poloniex.Messages.MarketEventTest do
             trade_timestamp: 1504480453,
             timestamp: 1504556374
           }
-        ]
+        ],
+        currency: nil
       }
     end
 
@@ -71,7 +74,8 @@ defmodule Poloniex.Messages.MarketEventTest do
             trade_timestamp: 1504480453,
             timestamp: 1504556374
           }
-        ]
+        ],
+        currency: nil,
       }
     end
   end

@@ -8,7 +8,7 @@ defmodule Poloniex do
   def start_link(state \\ %{})
 
   def start_link(%{callback: {m, f}, channels: %{}} = state) when not is_nil(m) and is_atom(f) do
-    WebSockex.start_link(api_url(), __MODULE__, state)
+    WebSockex.start_link(api_url(), __MODULE__, Map.put(state, :channels, %{}))
   end
 
   def start_link(_) do
@@ -19,12 +19,12 @@ defmodule Poloniex do
     currency_pair |> build_subscription_frame |> send_frame(client)
   end
 
-  ## Callbacks
-
   def handle_frame({_type, msg}, state) do
     state = Poison.decode!(msg) |> MessageParser.process(state) |> handle_data(state)
     {:ok, state}
   end
+
+  ## Callbacks
 
   defp handle_data(%{heartbeat: timestamp}, state) do
     Map.put(state, :last_heartbeat, timestamp)
@@ -32,12 +32,12 @@ defmodule Poloniex do
 
   defp handle_data(%{events: _, currency: currency} = args, %{callback: {m, f}, channels: channels} = state) when is_nil(currency)  do
     currency = Map.get(channels, args[:channel])
-    apply(m, f, [Map.put(args, :currency, currency)])
+    apply(m, f, wrapped_events(Map.put(args, :currency, currency)))
     state
   end
 
   defp handle_data(%{events: _, currency: currency} = args, %{callback: {m, f}} = state) do
-    apply(m, f, [args])
+    apply(m, f, wrapped_events(args))
     channels = Map.put(state[:channels], args[:channel], currency)
     Map.put(state, :channels, channels)
   end
@@ -46,6 +46,10 @@ defmodule Poloniex do
 
   defp send_frame(frame, pid) do
     WebSockex.send_frame(pid, frame)
+  end
+
+  defp wrapped_events(%{events: events, currency: currency } = args) do
+    [%{events: events, currency: currency}]
   end
 
   defp api_url do
