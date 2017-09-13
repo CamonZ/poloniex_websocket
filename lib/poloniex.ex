@@ -19,12 +19,18 @@ defmodule Poloniex do
     currency_pair |> build_subscription_frame |> send_frame(client)
   end
 
+  ## Callbacks
+
+  def handle_connect(_conn, %{currencies: currencies}) do
+    if !empty?(currencies) do
+      Enum.each(currencies, fn(currency) -> subscribe_to_currency(self(), currency) end)
+    end
+  end
+
   def handle_frame({_type, msg}, state) do
     state = Poison.decode!(msg) |> MessageParser.process(state) |> handle_data(state)
     {:ok, state}
   end
-
-  ## Callbacks
 
   defp handle_data(%{heartbeat: timestamp}, state) do
     Map.put(state, :last_heartbeat, timestamp)
