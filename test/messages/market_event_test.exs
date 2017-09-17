@@ -1,12 +1,12 @@
-defmodule Poloniex.Messages.MarketEventTest do
+defmodule PoloniexWebsocket.Messages.MarketEventTest do
   use ExUnit.Case
 
-  alias Poloniex.Messages.MarketEvent, as: MarketEvent
-  alias Poloniex.Messages.OrderBook, as: OrderBook
-  alias Poloniex.Messages.OrderBookUpdate, as: OrderBookUpdate
-  alias Poloniex.Messages.MarketTrade, as: MarketTrade
+  alias PoloniexWebsocket.Messages.MarketEvent, as: MarketEvent
+  alias PoloniexWebsocket.Messages.OrderBook, as: OrderBook
+  alias PoloniexWebsocket.Messages.OrderBookUpdate, as: OrderBookUpdate
+  alias PoloniexWebsocket.Messages.MarketTrade, as: MarketTrade
 
-  doctest Poloniex.Messages.MarketEvent
+  doctest PoloniexWebsocket.Messages.MarketEvent
 
   describe "When building an order book update" do
     test "builds a bid order book update" do

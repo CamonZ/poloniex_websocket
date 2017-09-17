@@ -1,5 +1,5 @@
-defmodule Poloniex.Messages.MarketTrade do
-  alias Poloniex.Utils, as: Utils
+defmodule PoloniexWebsocket.Messages.MarketTrade do
+  alias PoloniexWebsocket.Utils, as: Utils
   alias __MODULE__
 
   defstruct trade_id: nil,

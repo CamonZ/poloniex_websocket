@@ -1,5 +1,5 @@
-defmodule Poloniex.Messages.OrderBook do
-  alias Poloniex.Utils, as: Utils
+defmodule PoloniexWebsocket.Messages.OrderBook do
+  alias PoloniexWebsocket.Utils, as: Utils
   alias __MODULE__
 
   defstruct bids: %{}, asks: %{}, timestamp: nil, nonce: nil

@@ -10,11 +10,11 @@ use Mix.Config
 
 # You can configure for your application as:
 #
-#     config :poloniex, key: :value
+#     config :poloniex_websocket, key: :value
 #
 # And access this configuration in your application as:
 #
-#     Application.get_env(:poloniex, :key)
+#     Application.get_env(:poloniex_websocket, :key)
 #
 # Or configure a 3rd-party app:
 #

@@ -1,7 +1,7 @@
-defmodule Poloniex.Messages.MarketEvent do
-  alias Poloniex.Messages.OrderBook, as: OrderBook
-  alias Poloniex.Messages.OrderBookUpdate, as: OrderBookUpdate
-  alias Poloniex.Messages.MarketTrade, as: MarketTrade
+defmodule PoloniexWebsocket.Messages.MarketEvent do
+  alias PoloniexWebsocket.Messages.OrderBook, as: OrderBook
+  alias PoloniexWebsocket.Messages.OrderBookUpdate, as: OrderBookUpdate
+  alias PoloniexWebsocket.Messages.MarketTrade, as: MarketTrade
 
   def build_events([nonce | events], timestamp) when is_integer(nonce) do
     process_events(hd(events), nonce, timestamp) |> wrap_result

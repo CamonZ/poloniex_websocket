@@ -1,10 +1,10 @@
-defmodule Poloniex.MessageParserTest do
+defmodule PoloniexWebsocket.MessageParserTest do
   use ExUnit.Case
-  alias Poloniex.MessageParser, as: MessageParser
-  alias Poloniex.Messages.OrderBookUpdate, as: OrderBookUpdate
-  alias Poloniex.Messages.MarketTrade, as: MarketTrade
+  alias PoloniexWebsocket.MessageParser, as: MessageParser
+  alias PoloniexWebsocket.Messages.OrderBookUpdate, as: OrderBookUpdate
+  alias PoloniexWebsocket.Messages.MarketTrade, as: MarketTrade
 
-  doctest Poloniex.MessageParser
+  doctest PoloniexWebsocket.MessageParser
 
   test "processes a heartbeat message" do
     now = DateTime.utc_now |> DateTime.to_unix(:millisecond)

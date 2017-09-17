@@ -1,7 +1,7 @@
-defmodule Poloniex do
+defmodule PoloniexWebsocket do
   use WebSockex
 
-  alias Poloniex.MessageParser, as: MessageParser
+  alias PoloniexWebsocket.MessageParser, as: MessageParser
 
   ## Client API
 
@@ -22,7 +22,7 @@ defmodule Poloniex do
   ## Callbacks
 
   def handle_connect(_conn, %{currencies: currencies}) do
-    if !empty?(currencies) do
+    if !Enum.empty?(currencies) do
       Enum.each(currencies, fn(currency) -> subscribe_to_currency(self(), currency) end)
     end
   end

@@ -1,5 +1,5 @@
-defmodule Poloniex.MessageParser do
-  alias Poloniex.Messages.MarketEvent, as: MarketEvent
+defmodule PoloniexWebsocket.MessageParser do
+  alias PoloniexWebsocket.Messages.MarketEvent, as: MarketEvent
 
   def process(_, timestamp \\ nil)
 

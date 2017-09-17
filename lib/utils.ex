@@ -1,4 +1,4 @@
-defmodule Poloniex.Utils do
+defmodule PoloniexWebsocket.Utils do
   def to_integer(num) do
     parts = String.split(num, ".") |> Enum.reverse
 

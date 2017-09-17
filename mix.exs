@@ -1,8 +1,8 @@
-defmodule Poloniex.Mixfile do
+defmodule PoloniexWebsocket.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :poloniex,
+    [app: :poloniex_websocket,
      version: "0.1.0",
      elixir: "~> 1.4",
      build_embedded: Mix.env == :prod,
