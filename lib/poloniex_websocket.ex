@@ -21,10 +21,13 @@ defmodule PoloniexWebsocket do
 
   ## Callbacks
 
-  def handle_connect(_conn, %{currencies: currencies}) do
+  def handle_connect(_conn, state) do
+    currencies = state[:currencies] || []
+
     if !Enum.empty?(currencies) do
       Enum.each(currencies, fn(currency) -> subscribe_to_currency(self(), currency) end)
     end
+    {:ok, state}
   end
 
   def handle_frame({_type, msg}, state) do

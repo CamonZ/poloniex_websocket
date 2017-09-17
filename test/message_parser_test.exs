@@ -19,23 +19,24 @@ defmodule PoloniexWebsocket.MessageParserTest do
 
     %{events: [book_update, market_trade]} = MessageParser.process(data, now)
 
-    assert book_update == %OrderBookUpdate{
+    assert book_update == %{
       nonce: 128109982,
       side: :ask,
       rate: 130,
       amount: 100,
-      timestamp: now
+      timestamp: now,
+      type: :order_book_update
     }
 
-    assert market_trade == %MarketTrade{
+    assert market_trade == %{
       nonce: 128109982,
       side: :buy,
       rate: 130,
       amount: 100,
       trade_id: "8279109",
       trade_timestamp: 1504999563,
-      timestamp: now
+      timestamp: now,
+      type: :market_trade
     }
-
   end
 end
