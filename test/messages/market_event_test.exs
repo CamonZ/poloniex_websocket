@@ -2,23 +2,22 @@ defmodule PoloniexWebsocket.Messages.MarketEventTest do
   use ExUnit.Case
 
   alias PoloniexWebsocket.Messages.MarketEvent, as: MarketEvent
-  alias PoloniexWebsocket.Messages.OrderBook, as: OrderBook
-  alias PoloniexWebsocket.Messages.OrderBookUpdate, as: OrderBookUpdate
-  alias PoloniexWebsocket.Messages.MarketTrade, as: MarketTrade
 
   doctest PoloniexWebsocket.Messages.MarketEvent
 
   describe "When building an order book update" do
     test "builds a bid order book update" do
       data = [90077516, [["o",1,"0.00004962","0.00000150"]]]
-      assert MarketEvent.build_events(data, 1504556374) == %{
+      now = DateTime.from_unix!(1504556374, :millisecond)
+
+      assert MarketEvent.build_events(data, now) == %{
         events: [
           %{
             nonce: 90077516,
             side: :bid,
             rate: 4962,
             amount: 150,
-            timestamp: 1504556374,
+            timestamp: now,
             type: :order_book_update
           }
         ],
@@ -28,14 +27,16 @@ defmodule PoloniexWebsocket.Messages.MarketEventTest do
 
     test "builds an ask order book update" do
       data = [90077516, [["o",0,"0.00004962","0.00000150"]]]
-      assert MarketEvent.build_events(data, 1504556374) == %{
+      now = DateTime.from_unix!(1504556374, :millisecond)
+
+      assert MarketEvent.build_events(data, now) == %{
         events: [
           %{
             nonce: 90077516,
             side: :ask,
             rate: 4962,
             amount: 150,
-            timestamp: 1504556374,
+            timestamp: now,
             type: :order_book_update
           }
         ],
@@ -47,7 +48,9 @@ defmodule PoloniexWebsocket.Messages.MarketEventTest do
   describe "When building a market trade update" do
     test "and the trade is an uptick" do
       data = [90077516, [["t","13000395",1,"0.00004995","0.00000660",1504480453]]]
-      assert MarketEvent.build_events(data, 1504556374) == %{
+      now = DateTime.from_unix!(1504556374, :millisecond)
+
+      assert MarketEvent.build_events(data, now) == %{
         events: [
           %{
             nonce: 90077516,
@@ -55,8 +58,8 @@ defmodule PoloniexWebsocket.Messages.MarketEventTest do
             rate: 4995,
             amount: 660,
             trade_id: "13000395",
-            trade_timestamp: 1504480453,
-            timestamp: 1504556374,
+            trade_timestamp: DateTime.from_unix!(1504480453, :millisecond),
+            timestamp: now,
             type: :market_trade
           }
         ],
@@ -66,7 +69,8 @@ defmodule PoloniexWebsocket.Messages.MarketEventTest do
 
     test "and the trade is a downtick" do
       data = [90077516, [["t","13000395",0,"0.00004995","0.00000660",1504480453]]]
-      assert MarketEvent.build_events(data, 1504556374) == %{
+      now = DateTime.from_unix!(1504556374, :millisecond)
+      assert MarketEvent.build_events(data, now) == %{
         events: [
           %{
             nonce: 90077516,
@@ -74,8 +78,8 @@ defmodule PoloniexWebsocket.Messages.MarketEventTest do
             rate: 4995,
             amount: 660,
             trade_id: "13000395",
-            trade_timestamp: 1504480453,
-            timestamp: 1504556374,
+            trade_timestamp: DateTime.from_unix!(1504480453, :millisecond),
+            timestamp: now,
             type: :market_trade
           }
         ],
@@ -100,13 +104,13 @@ defmodule PoloniexWebsocket.Messages.MarketEventTest do
         ]
       ]
     ]
-
-    assert MarketEvent.build_events(data, 1504556374) == %{
+    now =  DateTime.from_unix!(1504556374, :millisecond)
+    assert MarketEvent.build_events(data, now) == %{
       currency: "BTC_STRAT",
       events: [
         %{
           nonce: 27366912,
-          timestamp: 1504556374,
+          timestamp: now,
           bids: %{
             134000 => 165901646269,
             133188 => 52557287

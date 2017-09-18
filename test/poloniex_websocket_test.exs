@@ -1,5 +1,4 @@
 defmodule PoloniexWebsocketTest do
-  alias PoloniexWebsocket.Messages.OrderBookUpdate, as: OrderBookUpdate
   use ExUnit.Case
   doctest PoloniexWebsocket
 
@@ -20,7 +19,7 @@ defmodule PoloniexWebsocketTest do
       assert currency == "BTC_XRP"
       assert is_list(events)
 
-      {extracted, rest} = Map.split(hd(events), [:side, :rate, :amount, :nonce])
+      {extracted, _} = Map.split(hd(events), [:side, :rate, :amount, :nonce])
 
       assert extracted == %{
         nonce: 92261674,

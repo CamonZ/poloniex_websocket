@@ -8,7 +8,7 @@ defmodule PoloniexWebsocket.Messages.MarketTrade do
       trade_id: trade_id,
       rate: Utils.to_integer(rate),
       amount: Utils.to_integer(amount),
-      trade_timestamp: trade_timestamp,
+      trade_timestamp: DateTime.from_unix!(trade_timestamp, :millisecond),
       timestamp: timestamp
     })
   end
@@ -20,7 +20,7 @@ defmodule PoloniexWebsocket.Messages.MarketTrade do
       trade_id: trade_id,
       rate: Utils.to_integer(rate),
       amount: Utils.to_integer(amount),
-      trade_timestamp: trade_timestamp,
+      trade_timestamp: DateTime.from_unix!(trade_timestamp, :millisecond),
       timestamp: timestamp
     })
   end

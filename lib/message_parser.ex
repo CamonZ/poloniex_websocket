@@ -24,6 +24,6 @@ defmodule PoloniexWebsocket.MessageParser do
   end
 
   defp now do
-    DateTime.utc_now |> DateTime.to_unix(:millisecond)
+    DateTime.utc_now
   end
 end
