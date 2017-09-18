@@ -7,7 +7,7 @@ defmodule PoloniexWebsocket do
 
   def start_link(state \\ %{})
 
-  def start_link(%{callback: {m, f}, channels: %{}} = state) when not is_nil(m) and is_atom(f) do
+  def start_link(%{callback: {m, f}} = state) when not is_nil(m) and is_atom(f) do
     WebSockex.start_link(api_url(), __MODULE__, Map.put(state, :channels, %{}))
   end
 
@@ -21,11 +21,14 @@ defmodule PoloniexWebsocket do
 
   ## Callbacks
 
-  def handle_connect(_conn, state) do
+  def handle_connect(conn, state) do
     currencies = state[:currencies] || []
 
     if !Enum.empty?(currencies) do
-      Enum.each(currencies, fn(currency) -> subscribe_to_currency(self(), currency) end)
+      Enum.each(currencies, fn(currency) ->
+        frame = build_subscription_frame(currency)
+        sync_send(conn, frame)
+      end)
     end
     {:ok, state}
   end
@@ -66,6 +69,11 @@ defmodule PoloniexWebsocket do
   end
 
   defp build_subscription_frame(currency) do
-    { :text, Poison.encode(%{command: "subscribe", channel: currency}) }
+    { :text, Poison.encode!(%{command: "subscribe", channel: currency}) }
+  end
+
+  defp sync_send(conn, frame) do
+    with {:ok, binary_frame} <- WebSockex.Frame.encode_frame(frame),
+      do: WebSockex.Conn.socket_send(conn, binary_frame)
   end
 end
