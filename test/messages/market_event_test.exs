@@ -14,7 +14,7 @@ defmodule PoloniexWebsocket.Messages.MarketEventTest do
         events: [
           %{
             nonce: 90077516,
-            side: :bid,
+            side: "bid",
             rate: 4962,
             amount: 150,
             timestamp: now,
@@ -33,7 +33,7 @@ defmodule PoloniexWebsocket.Messages.MarketEventTest do
         events: [
           %{
             nonce: 90077516,
-            side: :ask,
+            side: "ask",
             rate: 4962,
             amount: 150,
             timestamp: now,
@@ -54,7 +54,7 @@ defmodule PoloniexWebsocket.Messages.MarketEventTest do
         events: [
           %{
             nonce: 90077516,
-            side: :buy,
+            side: "buy",
             rate: 4995,
             amount: 660,
             trade_id: "13000395",
@@ -74,7 +74,7 @@ defmodule PoloniexWebsocket.Messages.MarketEventTest do
         events: [
           %{
             nonce: 90077516,
-            side: :sell,
+            side: "sell",
             rate: 4995,
             amount: 660,
             trade_id: "13000395",

@@ -4,7 +4,7 @@ defmodule PoloniexWebsocket.Messages.OrderBookUpdate do
   def from_market_data([side, rate, amount], nonce, timestamp) when side == 1 do
     Map.merge(default_map, %{
       nonce: nonce,
-      side: :bid,
+      side: "bid",
       rate: Utils.to_integer(rate),
       amount: Utils.to_integer(amount),
       timestamp: timestamp
@@ -14,7 +14,7 @@ defmodule PoloniexWebsocket.Messages.OrderBookUpdate do
   def from_market_data([side, rate, amount], nonce, timestamp) when side == 0 do
     Map.merge(default_map, %{
       nonce: nonce,
-      side: :ask,
+      side: "ask",
       rate: Utils.to_integer(rate),
       amount: Utils.to_integer(amount),
       timestamp: timestamp

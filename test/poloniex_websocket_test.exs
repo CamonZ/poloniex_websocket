@@ -23,7 +23,7 @@ defmodule PoloniexWebsocketTest do
 
       assert extracted == %{
         nonce: 92261674,
-        side: :ask,
+        side: "ask",
         rate: 5136,
         amount: 1839534225
       }

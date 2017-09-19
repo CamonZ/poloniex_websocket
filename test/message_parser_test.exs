@@ -19,7 +19,7 @@ defmodule PoloniexWebsocket.MessageParserTest do
 
     assert book_update == %{
       nonce: 128109982,
-      side: :ask,
+      side: "ask",
       rate: 130,
       amount: 100,
       timestamp: now,
@@ -28,7 +28,7 @@ defmodule PoloniexWebsocket.MessageParserTest do
 
     assert market_trade == %{
       nonce: 128109982,
-      side: :buy,
+      side: "buy",
       rate: 130,
       amount: 100,
       trade_id: "8279109",
