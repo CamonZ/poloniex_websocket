@@ -3,7 +3,7 @@ defmodule PoloniexWebsocket.Messages.OrderBook do
 
   def from_market_data([raw_asks, raw_bids], nonce, timestamp) do
     Map.merge(default_map, %{
-      timestamp: timestamp,
+      recorded_at: timestamp,
       nonce: nonce,
       bids: process_raw_book(raw_bids),
       asks: process_raw_book(raw_asks)

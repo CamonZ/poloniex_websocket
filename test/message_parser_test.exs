@@ -22,7 +22,7 @@ defmodule PoloniexWebsocket.MessageParserTest do
       side: "ask",
       rate: 130,
       amount: 100,
-      timestamp: now,
+      recorded_at: now,
       type: :order_book_update
     }
 
@@ -33,7 +33,7 @@ defmodule PoloniexWebsocket.MessageParserTest do
       amount: 100,
       trade_id: "8279109",
       trade_timestamp: DateTime.from_unix!(1504999563, :millisecond),
-      timestamp: now,
+      recorded_at: now,
       type: :market_trade
     }
   end

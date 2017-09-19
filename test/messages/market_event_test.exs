@@ -17,7 +17,7 @@ defmodule PoloniexWebsocket.Messages.MarketEventTest do
             side: "bid",
             rate: 4962,
             amount: 150,
-            timestamp: now,
+            recorded_at: now,
             type: :order_book_update
           }
         ],
@@ -36,7 +36,7 @@ defmodule PoloniexWebsocket.Messages.MarketEventTest do
             side: "ask",
             rate: 4962,
             amount: 150,
-            timestamp: now,
+            recorded_at: now,
             type: :order_book_update
           }
         ],
@@ -59,7 +59,7 @@ defmodule PoloniexWebsocket.Messages.MarketEventTest do
             amount: 660,
             trade_id: "13000395",
             trade_timestamp: DateTime.from_unix!(1504480453, :millisecond),
-            timestamp: now,
+            recorded_at: now,
             type: :market_trade
           }
         ],
@@ -79,7 +79,7 @@ defmodule PoloniexWebsocket.Messages.MarketEventTest do
             amount: 660,
             trade_id: "13000395",
             trade_timestamp: DateTime.from_unix!(1504480453, :millisecond),
-            timestamp: now,
+            recorded_at: now,
             type: :market_trade
           }
         ],
@@ -110,7 +110,7 @@ defmodule PoloniexWebsocket.Messages.MarketEventTest do
       events: [
         %{
           nonce: 27366912,
-          timestamp: now,
+          recorded_at: now,
           bids: %{
             134000 => 165901646269,
             133188 => 52557287
