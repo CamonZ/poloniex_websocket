@@ -7,7 +7,7 @@ defmodule PoloniexWebsocket.Messages.OrderBookUpdate do
       side: "bid",
       rate: Utils.to_integer(rate),
       amount: Utils.to_integer(amount),
-      recorded_at: timestamp
+      recorded_at: timestamp |> DateTime.to_string
     })
   end
 
@@ -17,7 +17,7 @@ defmodule PoloniexWebsocket.Messages.OrderBookUpdate do
       side: "ask",
       rate: Utils.to_integer(rate),
       amount: Utils.to_integer(amount),
-      recorded_at: timestamp
+      recorded_at: timestamp |> DateTime.to_string
     })
   end
 

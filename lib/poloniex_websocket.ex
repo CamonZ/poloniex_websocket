@@ -34,7 +34,7 @@ defmodule PoloniexWebsocket do
   end
 
   def handle_frame({_type, msg}, state) do
-    state = Poison.decode!(msg) |> MessageParser.process(state) |> handle_data(state)
+    state = Poison.decode!(msg) |> MessageParser.process |> handle_data(state)
     {:ok, state}
   end
 
