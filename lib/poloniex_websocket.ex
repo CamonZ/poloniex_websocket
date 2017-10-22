@@ -7,13 +7,11 @@ defmodule PoloniexWebsocket do
 
   def start_link(state \\ %{})
 
-  def start_link(%{callback: {m, f}} = state) when not is_nil(m) and is_atom(f) do
+  def start_link(%{callback: {m, f}} = state) when not is_nil(m) and is_atom(f), do:
     WebSockex.start_link(api_url(), __MODULE__, Map.put(state, :channels, %{}))
-  end
 
-  def start_link(_) do
+  def start_link(_), do:
     raise "No callback specified"
-  end
 
   def subscribe_to_currency(client, currency_pair) do
     currency_pair |> build_subscription_frame |> send_frame(client)
@@ -36,6 +34,10 @@ defmodule PoloniexWebsocket do
   def handle_frame({_type, msg}, state) do
     state = Poison.decode!(msg) |> MessageParser.process |> handle_data(state)
     {:ok, state}
+  end
+
+  def handle_info({:ssl_closed} = message, state) do
+    {:reconnect, state}
   end
 
   defp handle_data(%{heartbeat: timestamp}, state) do

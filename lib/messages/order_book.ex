@@ -2,19 +2,15 @@ defmodule PoloniexWebsocket.Messages.OrderBook do
   alias PoloniexWebsocket.Utils, as: Utils
 
   def from_market_data([raw_asks, raw_bids], nonce, timestamp) do
-    Map.merge(default_map, %{
+    %{
+      type: :order_book,
       recorded_at: timestamp |> DateTime.to_string,
       nonce: nonce,
-      bids: process_raw_book(raw_bids),
-      asks: process_raw_book(raw_asks)
-    })
+      bids: processed_raw_book_from(raw_bids),
+      asks: processed_raw_book_from(raw_asks)
+    }
   end
 
-  defp process_raw_book(data) do
-    Enum.reduce(data, Map.new, fn({k, v}, acc) -> Map.put(acc, Utils.to_integer(k), Utils.to_integer(v)) end)
-  end
-
-  defp default_map do
-    %{type: :order_book}
-  end
+  defp processed_raw_book_from(data), do: data |> Enum.reduce(Map.new, &book_reductor/2)
+  defp book_reductor({k, v}, acc), do: Map.put(acc, Utils.to_integer(k), Utils.to_integer(v))
 end

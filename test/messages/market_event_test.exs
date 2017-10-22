@@ -10,7 +10,7 @@ defmodule PoloniexWebsocket.Messages.MarketEventTest do
       data = [90077516, [["o",1,"0.00004962","0.00000150"]]]
       now = DateTime.from_unix!(1504556374000, :millisecond)
 
-      assert MarketEvent.build_events(data, now) == %{
+      assert MarketEvent.from_message(data, now) == %{
         events: [
           %{
             nonce: 90077516,
@@ -29,7 +29,7 @@ defmodule PoloniexWebsocket.Messages.MarketEventTest do
       data = [90077516, [["o",0,"0.00004962","0.00000150"]]]
       now = DateTime.from_unix!(1504556374000, :millisecond)
 
-      assert MarketEvent.build_events(data, now) == %{
+      assert MarketEvent.from_message(data, now) == %{
         events: [
           %{
             nonce: 90077516,
@@ -50,7 +50,7 @@ defmodule PoloniexWebsocket.Messages.MarketEventTest do
       data = [90077516, [["t","13000395",1,"0.00004995","0.00000660",1504480453]]]
       now = DateTime.from_unix!(1504556374000, :millisecond)
 
-      assert MarketEvent.build_events(data, now) == %{
+      assert MarketEvent.from_message(data, now) == %{
         events: [
           %{
             nonce: 90077516,
@@ -71,7 +71,7 @@ defmodule PoloniexWebsocket.Messages.MarketEventTest do
       data = [90077516, [["t","13000395",0,"0.00004995","0.00000660",1504480453]]]
       now = DateTime.from_unix!(1504556374000, :millisecond)
 
-      assert MarketEvent.build_events(data, now) == %{
+      assert MarketEvent.from_message(data, now) == %{
         events: [
           %{
             nonce: 90077516,
@@ -108,7 +108,7 @@ defmodule PoloniexWebsocket.Messages.MarketEventTest do
 
     now =  DateTime.from_unix!(1504556374000, :millisecond)
 
-    assert MarketEvent.build_events(data, now) == %{
+    assert MarketEvent.from_message(data, now) == %{
       currency: "BTC_STRAT",
       events: [
         %{
