@@ -36,7 +36,10 @@ defmodule PoloniexWebsocket do
     {:ok, state}
   end
 
-  def handle_info({:ssl_closed} = message, state) do
+  def handle_info({:ssl_closed} = _message, state), do: {:ok, state}
+  def handle_disconnect(_, state) do
+    require Logger
+    Logger.info "Reconnecting ..."
     {:reconnect, state}
   end
 
@@ -62,7 +65,7 @@ defmodule PoloniexWebsocket do
     WebSockex.send_frame(pid, frame)
   end
 
-  defp wrapped_events(%{events: events, currency: currency } = args) do
+  defp wrapped_events(%{events: events, currency: currency } = _args) do
     [%{events: events, currency: currency}]
   end
 
