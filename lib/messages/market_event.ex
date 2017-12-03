@@ -1,7 +1,5 @@
 defmodule PoloniexWebsocket.Messages.MarketEvent do
-  alias PoloniexWebsocket.Messages.OrderBook, as: OrderBook
-  alias PoloniexWebsocket.Messages.OrderBookUpdate, as: OrderBookUpdate
-  alias PoloniexWebsocket.Messages.MarketTrade, as: MarketTrade
+  alias PoloniexWebsocket.Messages.{OrderBook, OrderBookUpdate, MarketTrade}
 
   def from_message([nonce | events], timestamp) when is_integer(nonce) do
     build_events(hd(events), nonce, timestamp) |> wrap_result()
@@ -12,7 +10,7 @@ defmodule PoloniexWebsocket.Messages.MarketEvent do
   defp wrap_result(result) do
     case is_map(result) do
       true -> result
-      false -> %{ events: result, currency: nil }
+      false -> %{ events: result, market: nil }
     end
   end
 
@@ -28,7 +26,7 @@ defmodule PoloniexWebsocket.Messages.MarketEvent do
   defp build_events([[type | [data | _]] | _], nonce, timestamp) when type == "i" do
     order_book = OrderBook.from_market_data(data["orderBook"], nonce, timestamp)
 
-    %{currency: data["currencyPair"], events: [order_book]}
+    %{market: data["currencyPair"], events: [order_book]}
   end
 
   defp build_events(_, _, _) do

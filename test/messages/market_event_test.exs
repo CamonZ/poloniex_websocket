@@ -21,7 +21,7 @@ defmodule PoloniexWebsocket.Messages.MarketEventTest do
             type: :order_book_update
           }
         ],
-        currency: nil
+        market: nil
       }
     end
 
@@ -40,7 +40,7 @@ defmodule PoloniexWebsocket.Messages.MarketEventTest do
             type: :order_book_update
           }
         ],
-        currency: nil
+        market: nil
       }
     end
   end
@@ -63,7 +63,7 @@ defmodule PoloniexWebsocket.Messages.MarketEventTest do
             type: :market_trade
           }
         ],
-        currency: nil
+        market: nil
       }
     end
 
@@ -84,7 +84,7 @@ defmodule PoloniexWebsocket.Messages.MarketEventTest do
             type: :market_trade
           }
         ],
-        currency: nil,
+        market: nil,
       }
     end
   end
@@ -109,7 +109,7 @@ defmodule PoloniexWebsocket.Messages.MarketEventTest do
     now =  DateTime.from_unix!(1504556374000, :millisecond)
 
     assert MarketEvent.from_message(data, now) == %{
-      currency: "BTC_STRAT",
+      market: "BTC_STRAT",
       events: [
         %{
           nonce: 27366912,
