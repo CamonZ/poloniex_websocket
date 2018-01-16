@@ -16,7 +16,7 @@ defmodule DataHandlerTest do
         market: "BTC_XRP"
       }
 
-      {:ok, state} = DataHandler.handle_cast({ :data_received, events }, %DataHandler{})
+      {:noreply, state} = DataHandler.handle_cast({ :data_received, events }, %DataHandler{})
 
       assert Map.get(state.channels, 117) == "BTC_XRP"
     end
@@ -27,7 +27,7 @@ defmodule DataHandlerTest do
       data = %{channel: 117,
         events: [%{
                     amount: 1839534225, nonce: 92261674, rate: 5136,
-                    recorded_at: now(), side: "ask",
+                    recorded_at: now, side: "ask",
                     type: :order_book_update
                  }],
         market: nil

@@ -17,12 +17,12 @@ defmodule PoloniexWebsocket.DataHandler do
   end
 
   def handle_cast({:register_consumer, consumer}, %DataHandler{consumers: consumers} = state) do
-    {:ok, Map.put(state, :consumers, [consumer | consumers])}
+    {:noreply, Map.put(state, :consumers, [consumer | consumers])}
   end
 
   def handle_cast({:data_received, events}, state) do
     new_state = handle_data(events, state)
-    {:ok, new_state}
+    {:noreply, new_state}
   end
 
   defp handle_data(%{heartbeat: timestamp}, state) do
@@ -39,25 +39,16 @@ defmodule PoloniexWebsocket.DataHandler do
     state
   end
 
-  defp handle_data(%{events: _, market: market_name, channel: channel_number} = args, %DataHandler{consumers: consumers} = state) do
+  defp handle_data(
+    %{events: _, market: market_name, channel: channel_number} = args,
+    %DataHandler{consumers: consumers} = state) do
+
     notify_consumers(consumers, wrapped_events(args))
     Map.put(state, :channels, updated_channels(state.channels, channel_number, market_name))
   end
 
-
-  defp notify_consumers(consumers, events) do
-    Enum.each(consumers, &notify_consumer(&1, events))
-  end
-
-  defp notify_consumer(consumer, events) do
-    GenServer.cast(consumer, {:market_events, events})
-  end
-
-  defp wrapped_events(%{events: events, market: market }) do
-    [%{events: events, market: market}]
-  end
-
-  defp updated_channels(channels_map, channel_number, market_name) do
-    Map.put(channels_map, channel_number, market_name)
-  end
+  defp notify_consumers(consumers, events), do: Enum.each(consumers, &notify_consumer(&1, events))
+  defp notify_consumer(consumer, events), do: GenServer.cast(consumer, {:market_events, events})
+  defp wrapped_events(%{events: events, market: market }), do: [%{events: events, market: market}]
+  defp updated_channels(channels_map, channel_number, market_name), do: Map.put(channels_map, channel_number, market_name)
 end

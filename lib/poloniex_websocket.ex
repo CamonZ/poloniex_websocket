@@ -7,11 +7,12 @@ defmodule PoloniexWebsocket do
 
   ## Client API
 
-  def start_link(_, _)
+  def start_link(state, consumers \\ [])
 
   def start_link(%PoloniexWebsocket{markets: markets} = state, consumers) when length(markets) > 0 do
     {:ok, data_handler} = DataHandler.start_link(%DataHandler{consumers: consumers})
     Process.link(data_handler)
+
     WebSockex.start_link(@api_url, __MODULE__, Map.put(state, :data_handler, data_handler))
   end
 
